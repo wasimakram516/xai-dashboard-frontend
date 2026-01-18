@@ -27,13 +27,6 @@ export default function Navbar() {
 
   const open = Boolean(anchorEl);
   const teacherName = teacher?.full_name ?? "";
-  const initials =
-    teacherName
-      ?.split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase() || "?";
 
   return (
     <AppBar
@@ -65,7 +58,13 @@ export default function Navbar() {
           <>
             <Tooltip title={teacherName}>
               <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-                <Avatar sx={{ bgcolor: "primary.main" }}>{initials}</Avatar>
+                <Avatar
+                  sx={{
+                    bgcolor: "primary.main",
+                  }}
+                >
+                  <AccountCircleIcon  sx={{ width:36, height:36,}}/>
+                </Avatar>
               </IconButton>
             </Tooltip>
 

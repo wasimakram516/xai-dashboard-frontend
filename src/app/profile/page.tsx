@@ -9,6 +9,7 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  Button,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,6 +17,7 @@ import LockResetIcon from "@mui/icons-material/LockReset";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useEffect, useState } from "react";
 
 import { useAuth } from "@/contexts/AuthContext";
@@ -65,74 +67,111 @@ export default function ProfilePage() {
       <Box
         sx={{
           minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           backgroundColor: "background.default",
-          px: 2,
+          px: 4,
+          py: 6,
         }}
       >
-        <Paper sx={{ width: "100%", maxWidth: 640, p: 4, borderRadius: 3 }}>
-          {/* HEADER */}
+        {/* =====================================================
+            PAGE HEADER (LEFT / RIGHT)
+        ====================================================== */}
+        <Box maxWidth="xl" mx="auto">
           <Stack
-            direction="row"
+            direction={{ xs: "column", md: "row" }}
             justifyContent="space-between"
-            alignItems="center"
+            alignItems={{ xs: "flex-start", md: "center" }}
+            spacing={2}
           >
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar sx={{ width: 72, height: 72, bgcolor: "primary.main" }}>
-                <AccountCircleIcon sx={{ fontSize: 52 }} />
-              </Avatar>
+            <Box>
+              <Typography variant="h4" fontWeight={600} gutterBottom>
+                Educator Profile
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                Manage your account information associated with the Explainable
+                AI Dashboard for Adaptive Learning Systems.
+              </Typography>
+            </Box>
 
-              <Box>
-                <Typography variant="h5" fontWeight={600}>
-                  {teacher?.full_name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Educator Account
-                </Typography>
-              </Box>
-            </Stack>
-
-            <Tooltip title="Delete Account">
-              <IconButton color="error" onClick={() => setConfirmDelete(true)}>
-                <DeleteForeverIcon />
-              </IconButton>
-            </Tooltip>
+            <Button
+              variant="outlined"
+              startIcon={<DashboardIcon />}
+              onClick={() => router.push("/dashboard")}
+            >
+              Return to Dashboard
+            </Button>
           </Stack>
 
           <Divider sx={{ my: 4 }} />
+        </Box>
 
-          {/* DETAILS */}
-          <Stack spacing={3}>
-            <Stack direction="row" justifyContent="space-between">
+        {/* =====================================================
+            PROFILE CARD (CENTERED)
+        ====================================================== */}
+        <Box display="flex" justifyContent="center">
+          <Paper sx={{ width: "100%", maxWidth: 640, p: 4, borderRadius: 3 }}>
+            {/* CARD HEADER */}
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Stack direction="row" spacing={2} alignItems="center">
-                <PersonIcon color="action" />
-                <Typography>{teacher?.full_name}</Typography>
+                <Avatar sx={{ width: 72, height: 72, bgcolor: "primary.main" }}>
+                  <AccountCircleIcon sx={{ fontSize: 52 }} />
+                </Avatar>
+
+                <Box>
+                  <Typography variant="h5" fontWeight={600}>
+                    {teacher?.full_name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Educator Account
+                  </Typography>
+                </Box>
               </Stack>
-              <IconButton onClick={() => setEditProfileOpen(true)}>
-                <EditIcon />
-              </IconButton>
+
+              <Tooltip title="Delete Account">
+                <IconButton color="error" onClick={() => setConfirmDelete(true)}>
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
 
-            <Stack direction="row" spacing={2} alignItems="center">
-              <EmailIcon color="action" />
-              <Typography>{teacher?.email}</Typography>
-            </Stack>
+            <Divider sx={{ my: 4 }} />
 
-            <Stack direction="row" justifyContent="space-between">
+            {/* DETAILS */}
+            <Stack spacing={3}>
+              <Stack direction="row" justifyContent="space-between">
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <PersonIcon color="action" />
+                  <Typography>{teacher?.full_name}</Typography>
+                </Stack>
+                <IconButton onClick={() => setEditProfileOpen(true)}>
+                  <EditIcon />
+                </IconButton>
+              </Stack>
+
               <Stack direction="row" spacing={2} alignItems="center">
-                <LockResetIcon color="action" />
-                <Typography>Password</Typography>
+                <EmailIcon color="action" />
+                <Typography>{teacher?.email}</Typography>
               </Stack>
-              <IconButton onClick={() => setChangePasswordOpen(true)}>
-                <EditIcon />
-              </IconButton>
-            </Stack>
-          </Stack>
-        </Paper>
 
-        {/* MODALS */}
+              <Stack direction="row" justifyContent="space-between">
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <LockResetIcon color="action" />
+                  <Typography>Password</Typography>
+                </Stack>
+                <IconButton onClick={() => setChangePasswordOpen(true)}>
+                  <EditIcon />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </Paper>
+        </Box>
+
+        {/* =====================================================
+            MODALS
+        ====================================================== */}
         <EditProfileDialog
           open={editProfileOpen}
           onClose={() => setEditProfileOpen(false)}

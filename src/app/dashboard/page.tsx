@@ -22,7 +22,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { ChipProps } from "@mui/material";
 import StudentDetails from "@/components/student/StudentDetails";
 
-
 /* -----------------------------------
    Types
 ----------------------------------- */
@@ -111,15 +110,48 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <Box sx={{ p: { xs: 2, md: 4 }, height: "100%" }}>
-        <Typography variant="h4" fontWeight={700} mb={1}>
-          Student Performance Dashboard
-        </Typography>
-        <Typography color="text.secondary" mb={3}>
-          Explore predictive analytics and explainable AI insights for
-          individual students.
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "flex-start", md: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          {/* Left: Title + subtitle */}
+          <Box>
+            <Typography variant="h4" fontWeight={700} mb={0.5}>
+              Student Performance Dashboard
+            </Typography>
+            <Typography color="text.secondary">
+              Explore predictive analytics and explainable AI insights for
+              individual students.
+            </Typography>
+          </Box>
 
-        <Paper sx={{ borderRadius: 3, height: "75vh", overflow: "hidden" }}>
+          {/* Right: Dataset context */}
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            flexWrap="wrap"
+          >
+            <Chip
+              label={`${students.length} students`}
+              color="primary"
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label="Random sample from OULAD"
+              color="default"
+              size="small"
+            />
+          </Stack>
+        </Box>
+
+        <Paper sx={{ height: "75vh", overflow: "hidden" }}>
           {!isMobile ? (
             <Box
               sx={{
@@ -150,7 +182,10 @@ export default function DashboardPage() {
                   <IconButton onClick={() => setSelectedStudent(null)}>
                     <ArrowBackIcon />
                   </IconButton>
-                  <StudentDetails student={selectedStudent} isMobile={isMobile} />
+                  <StudentDetails
+                    student={selectedStudent}
+                    isMobile={isMobile}
+                  />
                 </Box>
               )}
             </Box>

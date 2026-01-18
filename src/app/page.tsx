@@ -2,9 +2,19 @@
 
 import { Box, Button, Container, Typography, Divider } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LandingPage() {
+  const { isAuthenticated } = useAuth();
+
+  const ctaHref = isAuthenticated ? "/dashboard" : "/login";
+  const ctaLabel = isAuthenticated
+    ? "Go to Educator Dashboard"
+    : "Access Educator Dashboard";
+  const ctaIcon = isAuthenticated ? <DashboardIcon /> : <LoginIcon />;
+
   return (
     <Container maxWidth="md">
       <Box
@@ -20,16 +30,16 @@ export default function LandingPage() {
         ====================================================== */}
         <Box textAlign="center">
           <Typography variant="h3" gutterBottom>
-            Explainable AI Dashboard for
+            From Black-Box to Glass-Box
           </Typography>
 
           <Typography variant="h4" color="primary" gutterBottom>
-            Adaptive Learning Systems
+            An Explainable AI Dashboard for Adaptive Learning Systems
           </Typography>
 
           <Typography variant="body1" color="text.secondary" sx={{ mt: 3 }}>
-            A research-driven decision-support system designed to assist
-            educators in understanding, predicting, and interpreting student
+            A research-driven, educator-oriented decision-support system designed
+            to assist in understanding, predicting, and interpreting student
             academic performance through transparent and explainable machine
             learning models.
           </Typography>
@@ -47,17 +57,16 @@ export default function LandingPage() {
 
           <Typography variant="body1" color="text.secondary" paragraph>
             Online and blended learning environments generate large volumes of
-            student interaction data, yet instructors often lack actionable and
-            interpretable insights to identify students who are at risk of poor
-            academic outcomes. Traditional predictive models typically operate
-            as black boxes, limiting their practical adoption in educational
-            settings.
+            student interaction data. However, educators often lack actionable
+            and interpretable insights to identify students who may be at risk of
+            poor academic outcomes.
           </Typography>
 
           <Typography variant="body1" color="text.secondary">
-            This lack of transparency reduces trust, hinders pedagogical
-            decision-making, and restricts early intervention strategies that
-            could otherwise support student success.
+            Traditional predictive models frequently operate as black boxes,
+            limiting trust, hindering pedagogical decision-making, and reducing
+            the effectiveness of early intervention strategies in educational
+            settings.
           </Typography>
         </Box>
 
@@ -70,19 +79,18 @@ export default function LandingPage() {
           </Typography>
 
           <Typography variant="body1" color="text.secondary" paragraph>
-            The Explainable AI Dashboard for Adaptive Learning Systems
-            integrates supervised machine learning with explainable artificial
-            intelligence (XAI) techniques to provide educators with both
-            predictive outcomes and human-interpretable explanations.
+            The Explainable AI Dashboard for Adaptive Learning Systems integrates
+            supervised machine learning with explainable artificial intelligence
+            (XAI) techniques to provide both predictive outcomes and
+            human-interpretable explanations.
           </Typography>
 
           <Typography variant="body1" color="text.secondary" paragraph>
-            Using real-world educational datasets, the system supports two core
-            analytical tasks: early identification of students at risk of
-            failure or withdrawal, and prediction of final academic outcomes.
-            Model predictions are accompanied by feature-level explanations,
-            enabling educators to understand the underlying factors influencing
-            each prediction.
+            Using real-world educational data, the system supports two core
+            analytical tasks: early identification of students at risk of failure
+            or withdrawal, and prediction of final academic outcomes. Each
+            prediction is accompanied by feature-level explanations, enabling
+            transparent and informed educational decision-making.
           </Typography>
         </Box>
 
@@ -95,23 +103,21 @@ export default function LandingPage() {
           </Typography>
 
           <Typography variant="body1" color="text.secondary" paragraph>
-            • Early risk detection based on initial engagement and assessment
-            behaviour
+            • Early risk detection based on initial engagement and early
+            assessment behaviour
           </Typography>
 
           <Typography variant="body1" color="text.secondary" paragraph>
-            • Transparent prediction explanations using SHAP-based
-            interpretability
+            • Transparent, SHAP-based explanations of model predictions
           </Typography>
 
           <Typography variant="body1" color="text.secondary" paragraph>
-            • Educator-focused visualisation of student-level and cohort-level
-            insights
+            • Educator-focused visualisation of student-level predictive insights
           </Typography>
 
           <Typography variant="body1" color="text.secondary">
-            • Separation of predictive modelling and user interface layers to
-            ensure scalability and deployment feasibility
+            • Clear separation between predictive modelling and user interface
+            layers to ensure robustness, scalability, and deployment feasibility
           </Typography>
         </Box>
 
@@ -124,41 +130,50 @@ export default function LandingPage() {
           </Typography>
 
           <Typography variant="body1" color="text.secondary">
-            The current prototype is designed exclusively for educators and
-            academic staff, enabling them to explore predictive insights and
-            explanations for enrolled students. Future extensions may include
-            administrative and student-facing views, subject to ethical and
-            institutional considerations.
+            This prototype is designed exclusively for educators and academic
+            staff, enabling exploration of predictive insights and explanations
+            for enrolled students. Future extensions may include administrative
+            or student-facing views, subject to ethical, institutional, and data
+            governance considerations.
           </Typography>
         </Box>
 
         <Divider />
 
         {/* =====================================================
-            CTA
+            CTA (AUTH-AWARE)
         ====================================================== */}
         <Box textAlign="center" mt={4}>
           <Button
             component={Link}
-            href="/login"
+            href={ctaHref}
             variant="contained"
             size="large"
-            startIcon={<LoginIcon />}
+            startIcon={ctaIcon}
           >
-            Access Educator Dashboard
+            {ctaLabel}
           </Button>
         </Box>
-        <Box textAlign="center" >
-        <Typography variant="body2" color="text.secondary">
-          An educator-oriented decision-support system integrating machine
-          learning and explainable AI (XAI) to predict and interpret student
-          performance.
-        </Typography>
 
-        <Typography variant="caption" color="text.secondary">
-          Dataset: Open University Learning Analytics Dataset (OULAD) • Models:
-          XGBoost • Explainability: SHAP • MSCS Research Prototype
-        </Typography>
+        {/* =====================================================
+            FOOTER / DISCLOSURE
+        ====================================================== */}
+        <Box textAlign="center">
+          <Typography variant="body2" color="text.secondary">
+            Research Prototype by <strong>Wasim Akram</strong> <br />
+            Department of Computer Science and Information Technology, Superior
+            University Lahore (Sargodha Campus), Pakistan
+          </Typography>
+
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            sx={{ mt: 1 }}
+          >
+            Dataset: Open University Learning Analytics Dataset (OULAD) • Models:
+            XGBoost • Explainability: SHAP • MSCS Research Project
+          </Typography>
         </Box>
       </Box>
     </Container>
