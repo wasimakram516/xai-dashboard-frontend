@@ -19,7 +19,11 @@ export default function ChangePasswordDialog({
   open,
   onClose,
   onSuccess,
-}: any) {
+}: {
+  open: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
   const { showMessage } = useSnackbar();
 
   const [oldPassword, setOldPassword] = useState("");

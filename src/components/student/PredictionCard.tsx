@@ -1,36 +1,8 @@
 "use client";
 
 import { Paper, Typography, Stack, Box, Chip } from "@mui/material";
-import { ChipProps, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { motion } from "framer-motion";
-
-/* -----------------------------------
-   Risk / Confidence helpers
------------------------------------ */
-type PaletteColorKey =
-  | "error"
-  | "warning"
-  | "success";
-
-  
-function getRiskLevel(prob: number): {
-  label: string;
-  color: PaletteColorKey;
-} {
-  if (prob >= 0.7) return { label: "High Risk", color: "error" };
-  if (prob >= 0.4) return { label: "Medium Risk", color: "warning" };
-  return { label: "Low Risk", color: "success" };
-}
-
-function getConfidenceLevel(prob: number): {
-  label: string;
-  color: PaletteColorKey;
-} {
-  if (prob >= 0.7) return { label: "High Confidence", color: "success" };
-  if (prob >= 0.4) return { label: "Moderate Confidence", color: "warning" };
-  return { label: "Low Confidence", color: "error" };
-}
-
 
 /* -----------------------------------
    Types
@@ -41,7 +13,13 @@ type Props = {
   probability: number;
   probabilityLabel: string;
   explanation: string;
-  confidenceMode?: boolean;
+  threshold?: number;
+  confidenceLabel?: string;
+  tone?: "positive" | "negative";
+  headerChipLabel?: string;
+  headerChipColor?: "success" | "warning" | "error" | "primary" | "default";
+  decisionRuleLabel?: string;
+  embedded?: boolean;
 };
 
 /* -----------------------------------
@@ -59,24 +37,45 @@ export default function PredictionCard({
   probability,
   probabilityLabel,
   explanation,
-  confidenceMode = false,
+  threshold,
+  confidenceLabel,
+  tone = "positive",
+  headerChipLabel,
+  headerChipColor = "default",
+  decisionRuleLabel,
+  embedded = false,
 }: Props) {
   const theme = useTheme();
 
-  const level = confidenceMode
-    ? getConfidenceLevel(probability)
-    : getRiskLevel(probability);
-
   const percent = Math.round(probability * 100);
-  const strokeColor = theme.palette[level.color].main;
+  const strokeColor =
+    tone === "positive" ? theme.palette.success.main : theme.palette.error.main;
   const dashOffset = CIRCUMFERENCE * (1 - probability);
+  const confidenceChipColor =
+    confidenceLabel === "high"
+      ? "success"
+      : confidenceLabel === "medium"
+        ? "warning"
+        : confidenceLabel === "low"
+          ? "error"
+          : "default";
+  const readableConfidence =
+    confidenceLabel ? `${confidenceLabel[0].toUpperCase()}${confidenceLabel.slice(1)}` : undefined;
+  const fallbackDecisionRule =
+    threshold !== undefined
+      ? title.includes("Early")
+        ? `Alert level: student is flagged as At Risk when risk chance is ${Math.round(threshold * 100)}% or higher.`
+        : `Decision level: student is marked as Pass when pass chance is ${Math.round(threshold * 100)}% or higher.`
+      : undefined;
 
-  return (
-    <Paper sx={{ p: 3 }}>
+  const content = (
+    <Box>
       {/* Header */}
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography fontWeight={600}>{title}</Typography>
-        <Chip label={level.label} color={level.color} size="small" />
+        {headerChipLabel && (
+          <Chip label={headerChipLabel} color={headerChipColor} size="small" />
+        )}
       </Stack>
 
       {/* Main Content */}
@@ -153,16 +152,43 @@ export default function PredictionCard({
             display="block"
             mb={1}
           >
-            {confidenceMode
-              ? "Based on full course engagement"
-              : "Based on early-course behaviour"}
+            {title.includes("Early")
+              ? "Based on early-course behaviour"
+              : "Based on full course engagement"}
           </Typography>
 
           <Typography variant="body2">
             {explanation}
           </Typography>
+          <Stack direction="row" spacing={1} mt={1} flexWrap="wrap">
+            {confidenceLabel && (
+              <Chip
+                size="small"
+                color={confidenceChipColor}
+                label={`Model certainty: ${readableConfidence}`}
+              />
+            )}
+          </Stack>
+          {(decisionRuleLabel || fallbackDecisionRule) && (
+            <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+              {decisionRuleLabel || fallbackDecisionRule}
+            </Typography>
+          )}
+          <Typography variant="caption" color="text.secondary" display="block" mt={0.5}>
+            Probability = chance of this result. Model certainty = how sure the model is.
+          </Typography>
         </Box>
       </Stack>
+    </Box>
+  );
+
+  if (embedded) {
+    return <Box sx={{ p: 0 }}>{content}</Box>;
+  }
+
+  return (
+    <Paper variant="outlined" sx={{ p: 3, boxShadow: "none" }}>
+      {content}
     </Paper>
   );
 }

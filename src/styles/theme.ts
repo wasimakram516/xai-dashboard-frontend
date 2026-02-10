@@ -10,41 +10,59 @@ export const theme = createTheme({
 
   typography: {
     fontFamily: "'Poppins', sans-serif",
+    htmlFontSize: 16,
     h1: {
       fontFamily: "'Comfortaa', cursive",
-      fontSize: "3rem",
+      fontSize: "2.75rem",
       fontWeight: "700",
+      lineHeight: 1.2,
     },
     h2: {
       fontFamily: "'Comfortaa', cursive",
-      fontSize: "2rem",
+      fontSize: "2.25rem",
       fontWeight: "700",
+      lineHeight: 1.24,
     },
     h3: {
       fontFamily: "'Comfortaa', cursive",
-      fontSize: "1.75rem",
+      fontSize: "1.85rem",
       fontWeight: "700",
+      lineHeight: 1.28,
     },
     h4: {
       fontFamily: "'Comfortaa', cursive",
-      fontSize: "1.5rem",
+      fontSize: "1.6rem",
       fontWeight: "700",
+      lineHeight: 1.3,
     },
     h5: {
       fontFamily: "'Comfortaa', cursive",
-      fontSize: "1.3rem",
+      fontSize: "1.35rem",
       fontWeight: "700",
+      lineHeight: 1.34,
     },
-    h6: { fontFamily: "'Comfortaa', cursive", fontSize: "1.25rem" },
-    body1: { fontSize: "1.075rem", fontFamily: "'Poppins', sans-serif" },
-    body2: { fontSize: "0.9rem", fontFamily: "'Poppins', sans-serif" },
-    subtitle1: { fontSize: "0.85rem", fontWeight: 500 },
-    subtitle2: { fontSize: "0.8rem", fontWeight: 400 },
-    caption: { fontSize: "0.75rem" },
-    button: { textTransform: "uppercase", fontWeight: "bold" },
+    h6: {
+      fontFamily: "'Comfortaa', cursive",
+      fontSize: "1.15rem",
+      lineHeight: 1.38,
+    },
+    body1: {
+      fontSize: "1rem",
+      lineHeight: 1.65,
+      fontFamily: "'Poppins', sans-serif",
+    },
+    body2: {
+      fontSize: "0.95rem",
+      lineHeight: 1.6,
+      fontFamily: "'Poppins', sans-serif",
+    },
+    subtitle1: { fontSize: "0.95rem", lineHeight: 1.5, fontWeight: 500 },
+    subtitle2: { fontSize: "0.875rem", lineHeight: 1.5, fontWeight: 500 },
+    caption: { fontSize: "0.82rem", lineHeight: 1.45 },
+    button: { textTransform: "none", fontWeight: 600, letterSpacing: "0.01em" },
   },
 
-  shape: { borderRadius: 8 },
+  shape: { borderRadius: 12 },
 
   components: {
     // === Buttons ===
@@ -52,11 +70,12 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: "999px",
-          fontSize: "1rem",
-          padding: "10px 20px",
+          fontSize: "0.95rem",
+          padding: "10px 18px",
           fontWeight: 600,
           textTransform: "none",
-          transition: "all 0.3s ease",
+          lineHeight: 1.35,
+          transition: "all 0.2s ease",
         },
 
         // === CONTAINED VARIANTS ===
@@ -137,7 +156,73 @@ export const theme = createTheme({
     // === Paper Variants ===
     MuiPaper: {
       styleOverrides: {
-        root: {},
+        root: {
+          borderRadius: 12,
+        },
+      },
+    },
+
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          paddingTop: 12,
+          paddingBottom: 12,
+          paddingLeft: 16,
+          paddingRight: 16,
+          borderRadius: 10,
+          margin: "2px 6px",
+        },
+      },
+    },
+
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          fontSize: "1.05rem",
+          lineHeight: 1.35,
+          fontWeight: 500,
+        },
+        secondary: {
+          fontSize: "0.92rem",
+          lineHeight: 1.4,
+        },
+      },
+    },
+
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          height: 28,
+          borderRadius: 999,
+          fontSize: "0.84rem",
+          fontWeight: 500,
+        },
+      },
+    },
+
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          minHeight: 44,
+        },
+        indicator: {
+          height: 3,
+          borderRadius: 3,
+        },
+      },
+    },
+
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          minHeight: 44,
+          paddingLeft: 14,
+          paddingRight: 14,
+          fontSize: "0.92rem",
+          fontWeight: 600,
+          textTransform: "none",
+          letterSpacing: "0.01em",
+        },
       },
     },
 
@@ -145,6 +230,7 @@ export const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         input: {
+          lineHeight: 1.45,
           "&[dir='rtl'], [dir='rtl'] &": {
             textAlign: "right !important",
           },
@@ -193,6 +279,10 @@ export const theme = createTheme({
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: "#0077b6",
           },
+        },
+        input: {
+          paddingTop: 11,
+          paddingBottom: 11,
         },
       },
     },

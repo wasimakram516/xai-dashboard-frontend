@@ -9,6 +9,7 @@ import {
   Divider,
   Box,
   IconButton,
+  Paper,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -66,7 +67,7 @@ export default function StudentProfileDialog({
           <Box>
             <Typography variant="h4">{student.label}</Typography>
             <Typography variant="caption" color="text.secondary">
-              OULAD Student ID: {student.oulad_id}
+              Dataset student ID: {student.oulad_id}
             </Typography>
           </Box>
         </Stack>
@@ -86,12 +87,22 @@ export default function StudentProfileDialog({
 
       <DialogContent dividers>
         {/* DATA SOURCE */}
-        <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+        <Paper variant="outlined" sx={{ p: 1.5, mb: 2 }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <InfoOutlinedIcon fontSize="small" />
+            <Typography variant="subtitle2" color="text.secondary">
+              This profile helps explain the prediction context for this student.
+            </Typography>
+          </Stack>
+          <Typography variant="caption" color="text.secondary" display="block" mt={0.75}>
+            Source: Open University Learning Analytics Dataset (OULAD). Names are anonymized.
+          </Typography>
+        </Paper>
+
+        <Stack direction="row" spacing={1} alignItems="center" mb={1}>
           <InfoOutlinedIcon fontSize="small" />
           <Typography variant="subtitle2" color="text.secondary">
-            Data sourced from the Open University Learning Analytics Dataset
-            (OULAD). Student identifiers are anonymised; numeric OULAD IDs are
-            retained for dataset traceability.
+            Use this information as context. Predictions are based mostly on behaviour and assessment patterns.
           </Typography>
         </Stack>
 
@@ -100,19 +111,22 @@ export default function StudentProfileDialog({
         {/* DEMOGRAPHICS */}
         <Stack direction="row" spacing={1} alignItems="center" mb={1}>
           <SchoolIcon color="action" />
-          <Typography variant="h5">Demographics</Typography>
+          <Typography variant="h5">Student Background</Typography>
         </Stack>
+        <Typography variant="caption" color="text.secondary" display="block" mb={1.5}>
+          Basic profile details from the dataset.
+        </Typography>
 
         <Stack spacing={1.5} mb={2}>
-          <ProfileRow label="Gender" value={demographics.gender} />
+          <ProfileRow label="Gender" value={friendlyGender(demographics.gender)} />
           <ProfileRow label="Age Band" value={demographics.age_band} />
           <ProfileRow
-            label="Highest Education"
+            label="Education Level"
             value={demographics.highest_education}
           />
           <ProfileRow label="Region" value={demographics.region} />
           <ProfileRow
-            label="Disability"
+            label="Disability Support Flag"
             value={demographics.disability === "Y" ? "Yes" : "No"}
           />
         </Stack>
@@ -122,19 +136,22 @@ export default function StudentProfileDialog({
         {/* ENGAGEMENT STATS */}
         <Stack direction="row" spacing={1} alignItems="center" mb={1}>
           <BarChartIcon color="action" />
-          <Typography variant="h5">Engagement Statistics</Typography>
+          <Typography variant="h5">Learning Activity Summary</Typography>
         </Stack>
+        <Typography variant="caption" color="text.secondary" display="block" mb={1.5}>
+          These values summarize coursework activity used by the model.
+        </Typography>
 
         <Stack spacing={1.5}>
           <ProfileRow
-            label="Assessments Attempted"
+            label="Assessments Submitted"
             value={stats.num_assessments}
           />
-          <ProfileRow label="Average Score" value={stats.avg_score} />
-          <ProfileRow label="Total VLE Clicks" value={stats.total_clicks} />
+          <ProfileRow label="Average Assessment Score" value={formatNumber(stats.avg_score)} />
+          <ProfileRow label="Total Platform Clicks" value={formatNumber(stats.total_clicks)} />
           <ProfileRow
-            label="Engagement Variance"
-            value={stats.engagement_variance.toFixed(2)}
+            label="Activity Consistency"
+            value={describeConsistency(stats.engagement_variance)}
           />
         </Stack>
       </DialogContent>
@@ -160,4 +177,22 @@ function ProfileRow({
       <Typography variant="body2">{value}</Typography>
     </Box>
   );
+}
+
+function friendlyGender(value: string): string {
+  if (value === "M") return "Male";
+  if (value === "F") return "Female";
+  return value;
+}
+
+function formatNumber(value: number): string {
+  if (Number.isInteger(value)) return value.toString();
+  return value.toFixed(2);
+}
+
+function describeConsistency(variance: number): string {
+  if (!Number.isFinite(variance)) return "Unknown";
+  if (variance < 200) return "Very consistent activity";
+  if (variance < 600) return "Moderately consistent activity";
+  return "Highly variable activity";
 }

@@ -10,6 +10,10 @@ import { useTheme } from "@mui/material/styles";
 type Factor = {
   feature: string;
   impact: number;
+  meaning?: string;
+  direction?: string;
+  contribution_share?: number;
+  global_rank?: number | null;
 };
 
 /* -----------------------------------
@@ -21,9 +25,17 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 /* -----------------------------------
    Component
 ----------------------------------- */
-export default function ShapExplanationCard({ factors }: { factors: Factor[] }) {
+export default function ShapExplanationCard({
+  factors,
+  classOneLabel,
+  classZeroLabel,
+}: {
+  factors: Factor[];
+  classOneLabel: string;
+  classZeroLabel: string;
+}) {
   const theme = useTheme();
-  const maxImpact = Math.max(...factors.map((f) => Math.abs(f.impact)));
+  const maxImpact = Math.max(...factors.map((f) => Math.abs(f.impact)), 1e-9);
 
   return (
     <Stack spacing={2}>
@@ -91,9 +103,20 @@ export default function ShapExplanationCard({ factors }: { factors: Factor[] }) 
                   {f.feature.replace(/_/g, " ")}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
+                  {f.meaning ?? "Feature influencing prediction"}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" display="block">
                   {f.impact > 0
-                    ? "Increases predicted risk"
-                    : "Reduces predicted risk"}
+                    ? `For this student: increases ${classOneLabel} likelihood`
+                    : `For this student: increases ${classZeroLabel} likelihood`}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" display="block">
+                  Influence on this student: {((f.contribution_share ?? normalized) * 100).toFixed(1)}%
+                </Typography>
+                <Typography variant="caption" color="text.secondary" display="block">
+                  {f.global_rank
+                    ? `How common this factor is overall: rank ${f.global_rank} (1 = most common)`
+                    : "How common this factor is overall: not in top global list"}
                 </Typography>
               </Box>
             </Stack>

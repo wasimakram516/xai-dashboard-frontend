@@ -13,7 +13,7 @@ type Teacher = {
 type AuthContextType = {
   isAuthenticated: boolean;
   teacher: Teacher | null;
-  login: (token: string) => void;
+  login: (token: string) => Promise<void>;
   logout: () => void;
   refreshProfile: () => Promise<void>;
 };
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [teacher, setTeacher] = useState<Teacher | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = async (token: string) => {
+  const fetchProfile = async (token: string): Promise<boolean> => {
     try {
       const res = await fetch(`${API_BASE_URL}/teachers/me`, {
         headers: {
@@ -40,10 +40,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
       setTeacher(data);
       setIsAuthenticated(true);
+      return true;
     } catch {
       clearToken();
       setTeacher(null);
       setIsAuthenticated(false);
+      return false;
     } finally {
       setLoading(false);
     }
@@ -65,10 +67,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = (token: string) => {
+  const login = async (token: string) => {
     setToken(token);
-    fetchProfile(token);
-    router.push("/dashboard");
+    setIsAuthenticated(true);
+    setLoading(true);
+    const ok = await fetchProfile(token);
+    if (ok) {
+      router.replace("/dashboard");
+      return;
+    }
+    router.replace("/login");
   };
 
   const logout = () => {

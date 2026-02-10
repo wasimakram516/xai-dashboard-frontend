@@ -20,7 +20,12 @@ export default function EditProfileDialog({
   onClose,
   teacher,
   onSuccess,
-}: any) {
+}: {
+  open: boolean;
+  onClose: () => void;
+  teacher: { full_name: string; email: string };
+  onSuccess: () => void;
+}) {
   const { showMessage } = useSnackbar();
 
   const [fullName, setFullName] = useState(teacher.full_name);

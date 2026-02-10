@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
   Stack,
-  IconButton,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import SchoolIcon from "@mui/icons-material/School";
@@ -47,7 +46,7 @@ export default function LoginPage() {
       }
 
       const data = await res.json();
-      login(data.access_token);
+      await login(data.access_token);
       showMessage("Login successful", "success");
     } catch {
       showMessage("Server unreachable", "error");
@@ -84,7 +83,7 @@ export default function LoginPage() {
               Educator Login
             </Typography>
             <Typography variant="body2" color="text.secondary" align="center">
-              Sign in to access the XAI Learning Dashboard
+              Sign in to access GlassLearn
             </Typography>
           </Stack>
 

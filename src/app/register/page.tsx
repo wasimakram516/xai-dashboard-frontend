@@ -87,7 +87,7 @@ export default function RegisterPage() {
               Educator Registration
             </Typography>
             <Typography variant="body2" color="text.secondary" align="center">
-              Create an account to access the XAI Learning Dashboard
+              Create an account to access GlassLearn
             </Typography>
           </Stack>
 

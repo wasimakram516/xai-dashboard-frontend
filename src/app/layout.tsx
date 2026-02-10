@@ -3,8 +3,8 @@ import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: {
-    default: "XAI Dashboard for Adaptive Learning Systems",
-    template: "%s | XAI Learning Dashboard",
+    default: "GlassLearn",
+    template: "%s | GlassLearn",
   },
   description:
     "An educator-oriented decision-support dashboard integrating machine learning and Explainable AI (XAI) to predict and interpret student performance using the Open University Learning Analytics Dataset (OULAD).",

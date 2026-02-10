@@ -4,7 +4,7 @@ export default function Head() {
 
   return (
     <>
-      <title>XAI Dashboard for Adaptive Learning Systems</title>
+      <title>GlassLearn</title>
 
       <meta
         name="description"
@@ -17,25 +17,25 @@ export default function Head() {
       />
 
       <meta name="author" content="Wasim Akram" />
-      <meta name="application-name" content="XAI Learning Dashboard" />
+      <meta name="application-name" content="GlassLearn" />
       <meta name="referrer" content="origin-when-cross-origin" />
       <meta name="robots" content="index, follow" />
 
       {/* Open Graph */}
       <meta property="og:type" content="website" />
-      <meta property="og:title" content="XAI Dashboard for Adaptive Learning Systems" />
+      <meta property="og:title" content="GlassLearn" />
       <meta
         property="og:description"
         content="Explainable AI-powered dashboard for predicting and interpreting student academic performance using OULAD."
       />
-      <meta property="og:site_name" content="XAI Learning Dashboard" />
+      <meta property="og:site_name" content="GlassLearn" />
       <meta property="og:locale" content="en_US" />
       <meta property="og:url" content={baseUrl} />
       <meta property="og:image" content={`${baseUrl}/og-image.png`} />
 
       {/* Twitter / X */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="XAI Dashboard for Adaptive Learning Systems" />
+      <meta name="twitter:title" content="GlassLearn" />
       <meta
         name="twitter:description"
         content="Explainable AI dashboard for adaptive learning and early risk prediction in education."
