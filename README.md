@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GlassLearn Frontend
 
-## Getting Started
+Teacher-facing web dashboard for explainable student performance prediction.
 
-First, run the development server:
+## Overview
+`GlassLearn` is the frontend for your XAI ML service. It helps teachers:
+- view early-risk and final-outcome predictions,
+- understand local (student-level) and global (class-level) explanations,
+- track student trajectory across stages,
+- make intervention decisions with clearer context.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Tech stack:
+- `Next.js 16` (App Router)
+- `React 19`
+- `TypeScript`
+- `MUI` + `MUI Icons`
+- `Framer Motion`
+
+## Core Features
+- Auth-protected educator dashboard.
+- Student list with search by name/code.
+- Early and final stage prediction views (tabbed).
+- Trajectory Insight summary (`Improved`, `Declined Later`, etc.) with suggested action.
+- Local explanation cards (top factors, expandable).
+- Global insights dialog (class-wide factor charts).
+- Student background/profile dialog.
+- Unified loading states across list/details/insights.
+
+## Project Structure
+- `src/app/` routes (`/`, `/login`, `/register`, `/dashboard`, `/profile`)
+- `src/components/student/` student analytics UI components
+- `src/components/teacher/` profile/password dialogs
+- `src/contexts/` auth and snackbar context
+- `src/lib/config.ts` API base URL binding
+- `src/styles/theme.ts` global MUI theme
+
+## Prerequisites
+- `Node.js 20+`
+- Running backend ML service (FastAPI) with required endpoints
+
+## Environment Variables
+Create `.env.local` in the frontend root:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `NEXT_PUBLIC_API_BASE_URL`: backend API base URL.
+- `NEXT_PUBLIC_APP_URL`: used for metadata/OG URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run Locally
+Install and start:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open: `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+## Build and Production
+```bash
+npm run lint
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Auth Flow
+- Unauthenticated users are redirected away from protected routes.
+- Successful login stores token, hydrates teacher profile, then redirects to `/dashboard`.
+- Logout clears token and returns to `/login`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Expectations
+Frontend expects backend endpoints like:
+- `POST /auth/login`
+- `POST /auth/register`
+- `GET /teachers/me`
+- `PUT /teachers/me`
+- `PUT /teachers/me/password`
+- `DELETE /teachers/me`
+- `GET /students`
+- `GET /students/{student_id}`
+- `GET /students/{student_id}/insights?stage=early|final&top_k=...`
+- `GET /students/global/early?top_k=...`
+- `GET /students/global/final?top_k=...`
 
-## Deploy on Vercel
+## Branding
+Current product name: `GlassLearn`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+- This frontend is optimized for teacher readability and trust-focused explanations.
+- Keep UI terms non-technical where possible (teacher-first language).
