@@ -172,15 +172,17 @@ export default function ProfilePage() {
         {/* =====================================================
             MODALS
         ====================================================== */}
-        <EditProfileDialog
-          open={editProfileOpen}
-          onClose={() => setEditProfileOpen(false)}
-          teacher={teacher}
-          onSuccess={async () => {
-            await refreshProfile();
-            showMessage("Profile updated successfully", "success");
-          }}
-        />
+        {teacher && (
+          <EditProfileDialog
+            open={editProfileOpen}
+            onClose={() => setEditProfileOpen(false)}
+            teacher={teacher}
+            onSuccess={async () => {
+              await refreshProfile();
+              showMessage("Profile updated successfully", "success");
+            }}
+          />
+        )}
 
         <ChangePasswordDialog
           open={changePasswordOpen}

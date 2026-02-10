@@ -104,14 +104,15 @@ export default function StudentDetails({
 
   useEffect(() => {
     if (!student) return;
+    const studentId = student.student_id;
     let cancelled = false;
-    const cached = studentCacheRef.current.get(student.student_id);
+    const cached = studentCacheRef.current.get(studentId);
 
     if (cached) {
       setProfile(cached.profile);
       setEarly(cached.early);
       setFinalData(cached.finalData);
-      setLoadedStudentId(student.student_id);
+      setLoadedStudentId(studentId);
       return;
     }
 
@@ -120,15 +121,15 @@ export default function StudentDetails({
 
     async function load() {
       const [p, e, f] = await Promise.all([
-        fetch(`${API_BASE_URL}/students/${student.student_id}`, {
+        fetch(`${API_BASE_URL}/students/${studentId}`, {
           headers,
           signal: controller.signal,
         }),
-        fetch(`${API_BASE_URL}/students/${student.student_id}/insights?stage=early&top_k=8`, {
+        fetch(`${API_BASE_URL}/students/${studentId}/insights?stage=early&top_k=8`, {
           headers,
           signal: controller.signal,
         }),
-        fetch(`${API_BASE_URL}/students/${student.student_id}/insights?stage=final&top_k=8`, {
+        fetch(`${API_BASE_URL}/students/${studentId}/insights?stage=final&top_k=8`, {
           headers,
           signal: controller.signal,
         }),
@@ -145,8 +146,8 @@ export default function StudentDetails({
       setProfile(profileJson);
       setEarly(earlyJson);
       setFinalData(finalJson);
-      setLoadedStudentId(student.student_id);
-      studentCacheRef.current.set(student.student_id, {
+      setLoadedStudentId(studentId);
+      studentCacheRef.current.set(studentId, {
         profile: profileJson,
         early: earlyJson,
         finalData: finalJson,
@@ -154,7 +155,7 @@ export default function StudentDetails({
     }
 
     load().catch(() => {
-      if (!cancelled) setLoadedStudentId(student.student_id);
+      if (!cancelled) setLoadedStudentId(studentId);
     });
 
     return () => {

@@ -23,20 +23,20 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 ----------------------------------- */
 type StudentProfile = {
   student_id: string;
-  label: string;
-  oulad_id: number;
-  demographics: {
-    gender: string;
-    age_band: string;
-    highest_education: string;
-    region: string;
-    disability: string;
+  label?: string;
+  oulad_id?: number;
+  demographics?: {
+    gender?: string;
+    age_band?: string;
+    highest_education?: string;
+    region?: string;
+    disability?: string;
   };
-  stats: {
-    num_assessments: number;
-    avg_score: number;
-    total_clicks: number;
-    engagement_variance: number;
+  stats?: {
+    num_assessments?: number;
+    avg_score?: number;
+    total_clicks?: number;
+    engagement_variance?: number;
   };
 };
 
@@ -56,7 +56,8 @@ export default function StudentProfileDialog({
 }: Props) {
   if (!student) return null;
 
-  const { demographics, stats } = student;
+  const demographics = student.demographics ?? {};
+  const stats = student.stats ?? {};
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -65,9 +66,9 @@ export default function StudentProfileDialog({
         <Stack direction="row" spacing={1} alignItems="center">
           <PersonIcon />
           <Box>
-            <Typography variant="h4">{student.label}</Typography>
+            <Typography variant="h4">{student.label ?? student.student_id}</Typography>
             <Typography variant="caption" color="text.secondary">
-              Dataset student ID: {student.oulad_id}
+              Dataset student ID: {student.oulad_id ?? "N/A"}
             </Typography>
           </Box>
         </Stack>
@@ -118,16 +119,22 @@ export default function StudentProfileDialog({
         </Typography>
 
         <Stack spacing={1.5} mb={2}>
-          <ProfileRow label="Gender" value={friendlyGender(demographics.gender)} />
-          <ProfileRow label="Age Band" value={demographics.age_band} />
+          <ProfileRow label="Gender" value={friendlyGender(demographics.gender ?? "N/A")} />
+          <ProfileRow label="Age Band" value={demographics.age_band ?? "N/A"} />
           <ProfileRow
             label="Education Level"
-            value={demographics.highest_education}
+            value={demographics.highest_education ?? "N/A"}
           />
-          <ProfileRow label="Region" value={demographics.region} />
+          <ProfileRow label="Region" value={demographics.region ?? "N/A"} />
           <ProfileRow
             label="Disability Support Flag"
-            value={demographics.disability === "Y" ? "Yes" : "No"}
+            value={
+              demographics.disability === "Y"
+                ? "Yes"
+                : demographics.disability === "N"
+                  ? "No"
+                  : "N/A"
+            }
           />
         </Stack>
 
@@ -145,7 +152,7 @@ export default function StudentProfileDialog({
         <Stack spacing={1.5}>
           <ProfileRow
             label="Assessments Submitted"
-            value={stats.num_assessments}
+            value={formatNumber(stats.num_assessments)}
           />
           <ProfileRow label="Average Assessment Score" value={formatNumber(stats.avg_score)} />
           <ProfileRow label="Total Platform Clicks" value={formatNumber(stats.total_clicks)} />
@@ -185,12 +192,14 @@ function friendlyGender(value: string): string {
   return value;
 }
 
-function formatNumber(value: number): string {
+function formatNumber(value?: number): string {
+  if (value === undefined || value === null || Number.isNaN(value)) return "N/A";
   if (Number.isInteger(value)) return value.toString();
   return value.toFixed(2);
 }
 
-function describeConsistency(variance: number): string {
+function describeConsistency(variance?: number): string {
+  if (variance === undefined || variance === null || Number.isNaN(variance)) return "N/A";
   if (!Number.isFinite(variance)) return "Unknown";
   if (variance < 200) return "Very consistent activity";
   if (variance < 600) return "Moderately consistent activity";
